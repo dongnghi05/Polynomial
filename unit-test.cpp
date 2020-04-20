@@ -79,10 +79,10 @@ int main(int argc, char* argv[]){
 	if (a.Integrate(1, 2) == -7.375){
 		total += 0.75;
 		cout << "\tINTEGRATE PASSED " << total << endl;
-	}else{
-		cout << "\tINTEGRATE FAILED" << endl;
-	}
-
+	}else {
+        cout << "\tINTEGRATE FAILED" << endl;
+    }
+	
 	if (d.Divide(e).Equals(u)){
 		cout << "\tDIVIDE PASSED " << ++total << endl;
 	}else{

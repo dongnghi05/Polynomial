@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.10)
 project(polynomial_dongnghi05)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 add_executable(polynomial_dongnghi05
-        main.cpp
         makefile
         polynomial.cpp
         polynomial.h

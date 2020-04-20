@@ -5,6 +5,13 @@
 #include <sstream>
 #include <iomanip>
 #include <cfloat>
+#include <cmath>
+
+// Name: Nghi Vo (Ivy)
+// Lab 1: Polynominal
+// CSC 2431
+// Description: practice dynamic memory with a simple class.
+// Given the polynomial and with functions provide by Dr.Arias. Finishing the sum, subtract, multiply and derive.
 
 using std::istream;
 using std::ostream;
@@ -34,34 +41,105 @@ Polynomial::Polynomial(const Polynomial& polynomial): _degree(polynomial._degree
 }
 Polynomial::~Polynomial(){
 	// DO THIS FIRST TO PREVENT MEMORY LEAKS!
+	if (_coefficients != nullptr)
+	    delete [] _coefficients;
 }
 const Polynomial Polynomial::Sum(const Polynomial& rhs)const{
-	return Polynomial(0);
+    // If else to check which degree to use in the return polynomial.
+    // Using degree of larger one
+    if (this->_degree < rhs._degree){
+        Polynomial retVal(rhs._degree);
+        // Adding the with the same degree
+        for (size_t i = 0; i <= this->_degree; i++){
+            retVal._coefficients[i] = this->_coefficients[i] + rhs._coefficients[i];
+        }
+        // Adding the degree higher (which do not have the same
+        for (size_t j = rhs._degree; j <= rhs._degree - this->_degree; j--){
+            retVal._coefficients[j] = rhs._coefficients[j];
+        }
+        return retVal;
+    }
+    else {
+        Polynomial retVal(this->_degree);
+        for (size_t i = 0; i <= this->_degree; i++) {
+            retVal._coefficients[i] = this->_coefficients[i] + rhs._coefficients[i];
+        }
+        for (size_t j = this->_degree; j <= this->_degree - rhs._degree; j--) {
+            retVal._coefficients[j] = this->_coefficients[j];
+        }
+        return retVal;
+    }
 }
 const Polynomial Polynomial::Subtract(const Polynomial& rhs)const{
-	return Polynomial(0);
+    // If else to check which degree to use in the return polynomial.
+    // Using degree of larger one
+    if (this->_degree < rhs._degree){
+        Polynomial retVal(rhs._degree);
+        // Subtract the with the same degree
+        for (size_t i = 0; i <= rhs._degree; i++){
+            retVal._coefficients[i] =  rhs._coefficients[i] - this->_coefficients[i];
+        }
+        // Adding the rest the with different degree
+        for (size_t j = rhs._degree; j <= rhs._degree - this->_degree; j--){
+            retVal._coefficients[j] = rhs._coefficients[j];
+        }
+        return retVal;
+    }
+    else {
+        Polynomial retVal(this->_degree);
+        for (size_t i = 0; i <= this->_degree; i++) {
+            retVal._coefficients[i] = this->_coefficients[i] - rhs._coefficients[i];
+        }
+        for (size_t j = this->_degree; j <= this->_degree - rhs._degree; j--) {
+            retVal._coefficients[j] = this->_coefficients[j];
+        }
+        return retVal;
+    }
 }
 const Polynomial Polynomial::Minus()const{
-	Polynomial retVal(*this);
+	Polynomial retVal(this->_degree);
 	for (size_t i = 0; i < _degree + 1; i++) {
 		retVal._coefficients[i] *= -1;
 	}
 	return retVal;
 }
 const Polynomial Polynomial::Multiply(const Polynomial& rhs)const{
-	return Polynomial(0);
+    // Using the degree of sum of both polynomial
+	Polynomial retVal(this->_degree + rhs._degree);
+	for (size_t i = 0; i <= this->_degree; i++){
+        for (size_t j = 0; j <= rhs._degree; j++){
+            retVal._coefficients[i+j] += this->_coefficients[i] * rhs._coefficients[j];
+        }
+	}
+	return retVal;
 }
 const Polynomial Polynomial::Divide(const Polynomial& rhs)const{
-	return Polynomial(0);
+    return Polynomial(0);
+
 }
 const Polynomial Polynomial::Derive()const{
-	return Polynomial(0);
+    Polynomial retVal (this->_degree - 1);
+    for (size_t i = 1; i <= this->_degree; i++){
+        retVal._coefficients[i-1] = this->_coefficients[i] * i;
+    }
+    return retVal;
 }
 float Polynomial::Evaluate(float x)const{
-	return FLT_MAX;
+	float eVal = 0.0;
+	for (size_t i = 0; i <= this->_degree; i++){
+	    eVal += this->_coefficients[i] * powf(x, i);
+	}
+	return eVal;
 }
 float Polynomial::Integrate(float start, float end)const{
-	return FLT_MAX;
+    Polynomial retVal (this->_degree  + 1);
+    for (size_t i = 0; i <= this->_degree; i++){
+        retVal._coefficients[i+1] = this->_coefficients[i] / (i+1);
+    }
+    float result = retVal.Evaluate(end) - retVal.Evaluate(start);
+
+	return result;
+
 }
 const Polynomial& Polynomial::operator=(const Polynomial& rhs){
 	if (&rhs == this){
